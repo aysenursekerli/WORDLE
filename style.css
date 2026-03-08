@@ -1,0 +1,239 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0b1a30; /* Gece mavisi */
+    color: white; /* Yazılar gece mavisi üzerinde okunsun diye beyaz */
+}
+
+/* Ana Taşıyıcı: Logo solda, oyun sağda */
+.main-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    position: relative; /* Logoyu mutlak konumlandırmak için */
+    padding: 20px;
+}
+
+/* Logo Alanı */
+.logo-container {
+    position: absolute;
+    left: 100px; /* Soldan biraz daha sağa alındı */
+    top: 50%; /* Dikey ortalama için */
+    transform: translateY(-50%); /* Dikey hizalama ayarı */
+}
+
+.logo-container img {
+    max-width: 100%;
+    width: 250px; /* Logonun büyüklüğü */
+    height: 250px; /* Tam yuvarlak olması için genişlikle aynı ayarladık */
+    object-fit: cover; /* Resmi yuvarlağa oturtur */
+    border-radius: 50%; /* Tam yuvarlak yapar (beyazlıkları gizler) */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Gece mavisinde güzel görünmesi için hafif gölge eklendi */
+    transition: opacity 0.3s ease;
+}
+
+.logo-container .qr-code {
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: 0;
+    pointer-events: none;
+}
+
+.logo-container:hover .logo-img {
+    opacity: 0;
+}
+
+.logo-container:hover .qr-code {
+    opacity: 1;
+}
+
+/* Sağdaki Hilal Alanı */
+.crescent-container {
+    position: absolute;
+    right: 100px; /* Eski haline (100px) döndürdük */
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.crescent-container img {
+    max-width: 100%;
+    width: 250px; /* Eski boyutuna (250px) döndürdük */
+    height: 250px;
+    object-fit: cover;
+    border-radius: 50%; /* Aynı şekilde yuvarlak yapalım */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    transition: opacity 0.3s ease;
+}
+
+.crescent-container .hilal-names {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 250px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.7); /* İsimlerin okunması için koyu arka plan */
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.crescent-container .hilal-names p {
+    margin: 5px 0;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: white;
+}
+
+.crescent-container:hover .hilal-img {
+    opacity: 0;
+}
+
+.crescent-container:hover .hilal-names {
+    opacity: 1;
+}
+
+/* Oyun Alanı */
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -40px; /* Çok yukarı çıkıp yazıyı kesmesin diye biraz azalttık */
+    /* Wrapper zaten justify-content: center ile ortada kalacak */
+}
+
+h1 {
+    font-size: 1.5rem; /* Yazıyı küçülttük */
+    margin-top: 30px; /* Yazıyı biraz aşağı aldık */
+    margin-bottom: 15px;
+    letter-spacing: 2px;
+}
+
+#timer {
+    font-size: 1.2rem;
+    margin-bottom: 12px;
+    letter-spacing: 1px;
+}
+
+#game-board {
+    display: grid;
+    /* grid-template-columns is set dynamically in JavaScript based on the word length */
+    grid-gap: 5px;
+    margin-bottom: 20px;
+}
+
+.tile {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #6d6a6a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.tile.revealed {
+    transition: transform 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+    color: white;
+}
+
+.tile.flip {
+    transform: rotateX(90deg);
+}
+
+#keyboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px; /* Satırlar arasına biraz boşluk */
+}
+
+.keyboard-row {
+    display: flex;
+}
+
+.key {
+    width: 40px;
+    height: 58px;
+    margin: 3px;
+    border-radius: 4px;
+    background-color: #121213; /* Tuşların kendi arkaplanı siyah */
+    color: white; /* Harfler beyaz */
+    /* Rengi biraz açtım harfler görünsün diye */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+/* Enter veya Sil tuşunu isterseniz daha geniş yapabilirsiniz. Örnek: */
+.key.wide {
+    width: 80px; 
+}
+
+/* Modal Stilleri */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-content {
+    background-color: white;
+    color: black; /* Uyarı yazıları ve sonuç yazısı siyah olsun */
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+}
+
+#modal-title {
+    margin-top: 0;
+    font-size: 1.8rem;
+}
+
+#modal-message {
+    font-size: 1.2rem;
+    margin: 20px 0;
+}
+
+#modal-btn {
+    background-color: #6aaa64;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+#modal-btn:hover {
+    background-color: #5b9655;
+}

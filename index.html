@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>KELİME OYUNU</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="logo-container">
+            <img src="logo.png" alt="Logo" class="logo-img">
+            <img src="frame.png" alt="QR Code" class="qr-code">
+        </div>
+
+        <div class="game-wrapper">
+            <h1>KELİME OYUNU</h1>
+            <div id="timer">00:00</div>
+            <div id="game-board"></div>
+            <div id="keyboard-container"></div>
+        </div>
+
+        <div class="crescent-container">
+            <img src="hilal2.png" alt="Hilal" class="hilal-img">
+            <div class="hilal-names">
+                <p>Ahmet Benli</p>
+                <p>Ayşe Nur Şekerli</p>
+                <p>Ahmet Karaevren</p>
+                <p>Aleyna Polat</p>
+                <p>Deniz Baran Aykul</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-modal" class="modal hidden">
+        <div class="modal-content">
+            <h2 id="modal-title"></h2>
+            <p id="modal-message"></p>
+            <button id="modal-btn">Yeni Oyun</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
