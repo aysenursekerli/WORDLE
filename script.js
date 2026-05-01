@@ -6,16 +6,16 @@ const keys = [
 
 const wordList = [
     // 5 Harfli Kelimeler
-    "BAHAR", "MÜZİK", "SAHNE", "ÇADIR", "GÜNEŞ", "SINAV", "FİNAL", "BÖLÜM", "PROJE", "YEMEK",
-    "ÇİMEN", "KAYIT", "KREDİ", "MEZUN", "TÖREN", "KULÜP", "BİLET", "STANT", "DAVET", "COŞKU",
-    
+    "BAHAR", "ÇİÇEK", "MÜZİK", "SAHNE", "COŞKU", "ÇADIR", "GÜNEŞ", "ÇİMEN", "BİLET", "STANT",
+    "ŞARKI", "RİTİM", "YEMEK", "YARIŞ", "GİTAR", "BAHÇE", "DAVET",
+
     // 6 Harfli Kelimeler
-    "KAMPÜS", "KONSER", "ŞENLİK", "KANTİN", "EĞİTİM", "DERECE", "REKTÖR", "KÜLTÜR", "MERKEZ", "SOHBET",
-    "POSTER", "BAŞARI", "LİSANS", "YÜKSEK", "PRATİK",
-    
+    "ŞENLİK", "KONSER", "KAMPÜS", "PİKNİK", "SOHBET", "MELODİ", "ZEYBEK", "SPORCU",
+    "KÜLTÜR", "NEŞELİ", "COŞKUN", "KANTİN",
+
     // 7 Harfli Kelimeler
-    "FAKÜLTE", "ÖĞRENCİ", "EĞLENCE", "SEMİNER", "GÖSTERİ", "YARIŞMA", "TİYATRO", "DİPLOMA", "GELECEK", "HEYECAN",
-    "ÖĞRETİM", "DİNLETİ", "YETENEK", "AKADEMİ", "GENÇLİK"
+    "EĞLENCE", "GÖSTERİ", "YARIŞMA", "TİYATRO", "HEYECAN", "GENÇLİK", "DİNLETİ", "DOSTLUK", "PANAYIR", "TURNUVA",
+    "ŞARKICI", "OYUNCAK", "AKADEMİ", "KUTLAMA", "COŞKULU"
 ];
 const maxAttempts = 6;
 let wordLength;
@@ -360,15 +360,15 @@ function createFlowers() {
         const flower = document.createElement('div');
         flower.classList.add('flower');
         flower.textContent = emojis[Math.floor(Math.random() * emojis.length)];
-        
+
         // Rastgele yatay konum
         flower.style.left = Math.random() * 100 + 'vw';
-        
+
         // Rastgele animasyon süresi ve gecikme
         const duration = Math.random() * 3 + 2; // 2-5 saniye arası
         flower.style.animationDuration = duration + 's';
         flower.style.animationDelay = Math.random() * 2 + 's';
-        
+
         document.body.appendChild(flower);
 
         // Animasyon bitince elementi temizle
