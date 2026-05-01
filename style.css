@@ -5,7 +5,7 @@ body {
     min-height: 100vh;
     margin: 0;
     font-family: 'Montserrat', Arial, sans-serif;
-    background: linear-gradient(135deg, #87CEEB, #E0F6FF); /* Gökyüzü mavisi bahar teması */
+    background: linear-gradient(to bottom, #87ceeb, #fffacd, #98fb98); /* Gök mavisi -> Güneş sarısı -> Çimen yeşili */
     color: #121213; /* Yazılar açık arkaplanda rahat okunsun diye koyu renk */
 }
 
@@ -17,6 +17,7 @@ body {
     width: 100%;
     position: relative; /* Logoyu mutlak konumlandırmak için */
     padding: 20px;
+    z-index: 10; /* Arka plan desenlerinin üstünde kalsın */
 }
 
 
@@ -31,10 +32,25 @@ body {
 }
 
 h1 {
-    font-size: 1.5rem; /* Yazıyı küçülttük */
+    font-size: 2rem; /* Yazıyı biraz büyüttük */
     margin-top: 30px; /* Yazıyı biraz aşağı aldık */
     margin-bottom: 15px;
     letter-spacing: 2px;
+    
+    /* Bahar Renkleri Gradient Animasyonu */
+    background: linear-gradient(270deg, #ff7eb3, #ff758c, #ff9a44, #a18cd1, #fbc2eb);
+    background-size: 400% 400%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    animation: springGradient 8s ease infinite;
+}
+
+@keyframes springGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
 }
 
 #timer {
@@ -86,15 +102,21 @@ h1 {
     width: 40px;
     height: 58px;
     margin: 3px;
-    border-radius: 4px;
-    background-color: #121213; /* Tuşların kendi arkaplanı siyah */
-    color: white; /* Harfler beyaz */
-    /* Rengi biraz açtım harfler görünsün diye */
+    border-radius: 6px; /* Biraz daha yumuşak köşeler */
+    background-color: #0b1a30; /* Koyu gece mavisi */
+    color: #ff7eb3; /* Canlı bahar pembesi */
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-weight: bold;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.25); /* Dokunulabilir yumuşak gölge */
+    transition: transform 0.1s ease, box-shadow 0.1s ease; /* Tıklama hissi animasyonu */
+}
+
+.key:active {
+    transform: translateY(2px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* Enter veya Sil tuşunu isterseniz daha geniş yapabilirsiniz. Örnek: */
@@ -178,3 +200,40 @@ h1 {
         opacity: 0;
     }
 }
+
+/* Arka Plan Desenleri ve Animasyonları */
+.background-patterns {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* Tıklamaları engellememesi için */
+    z-index: 0;
+    overflow: hidden;
+}
+
+.bg-icon {
+    position: absolute;
+    font-size: 3rem;
+    opacity: 0.2; /* Çok şeffaf */
+    animation: drift linear infinite;
+    user-select: none;
+    filter: blur(1px); /* Daha yumuşak görünüm için hafif bulanıklık */
+}
+
+/* Farklı yönlere, hızlara ve başlangıç konumlarına sahip ikonlar */
+.bg-icon-1 { left: 10%; animation-duration: 25s; animation-delay: 0s; }
+.bg-icon-2 { left: 25%; animation-duration: 35s; animation-delay: -5s; font-size: 2rem; }
+.bg-icon-3 { left: 45%; animation-duration: 28s; animation-delay: -10s; font-size: 4rem; }
+.bg-icon-4 { left: 65%; animation-duration: 32s; animation-delay: -2s; font-size: 2.5rem; }
+.bg-icon-5 { left: 80%; animation-duration: 22s; animation-delay: -15s; }
+.bg-icon-6 { left: 95%; animation-duration: 40s; animation-delay: -8s; font-size: 3.5rem; }
+.bg-icon-7 { left: 35%; animation-duration: 30s; animation-delay: -20s; }
+.bg-icon-8 { left: 75%; animation-duration: 26s; animation-delay: -12s; font-size: 2rem; }
+
+@keyframes drift {
+    0% { transform: translateY(-10vh) rotate(0deg); }
+    100% { transform: translateY(110vh) rotate(360deg); }
+}
+
