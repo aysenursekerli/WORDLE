@@ -5,52 +5,17 @@ const keys = [
 ];
 
 const wordList = [
-    "İFTAR",
-    "SAHUR",
-    "ZEKAT",
-    "SECDE",
-    "ŞÜKÜR",
-    "SABIR",
-    "NİMET",
-    "TAKVA",
-    "KIBLE",
-    "RAHİM",
-    "HACET",
-    "KELAM",
-    "SALİH",
-    "HELAL",
-    "İMSAK",
-    "HURMA",
-    "SEVAP",
-    "MELEK",
-    "ZİKİR",
-    "TESBİH",
-    "KURBAN",
-    "İBADET",
-    "HİKMET",
-    "RAHMAN",
-    "KIRAAT",
-    "SÜNNET",
-    "SECDAH",
-    "RAMAZAN",
-    "TERAVİH",
-    "SADAKA",
-    "MÜBAREK",
-    "RAHMET",
-    "CENNET",
-    "ŞEFAAT",
-    "BEREKET",
-    "HİKMETLİ",
-    "NİYAZ",
-    "İKRAM",
-    "TEVBE",
-    "RAHMET",
-    "MÜMİN",
+    // 5 Harfli Kelimeler
+    "BAHAR", "MÜZİK", "SAHNE", "ÇADIR", "GÜNEŞ", "SINAV", "FİNAL", "BÖLÜM", "PROJE", "YEMEK",
+    "ÇİMEN", "KAYIT", "KREDİ", "MEZUN", "TÖREN", "KULÜP", "BİLET", "STANT", "DAVET", "COŞKU",
+    
     // 6 Harfli Kelimeler
-    "KANDİL", "TERAVİ", "YARDIM", "ŞERBET", "PİDELİ", "İBADET", "TESBİH", "MİNARE",
-
+    "KAMPÜS", "KONSER", "ŞENLİK", "KANTİN", "EĞİTİM", "DERECE", "REKTÖR", "KÜLTÜR", "MERKEZ", "SOHBET",
+    "POSTER", "BAŞARI", "LİSANS", "YÜKSEK", "PRATİK",
+    
     // 7 Harfli Kelimeler
-    "RAMAZAN", "SADAKA", "MÜBAREK", "NİYETLİ"
+    "FAKÜLTE", "ÖĞRENCİ", "EĞLENCE", "SEMİNER", "GÖSTERİ", "YARIŞMA", "TİYATRO", "DİPLOMA", "GELECEK", "HEYECAN",
+    "ÖĞRETİM", "DİNLETİ", "YETENEK", "AKADEMİ", "GENÇLİK"
 ];
 const maxAttempts = 6;
 let wordLength;
@@ -89,13 +54,13 @@ function setKeyState(letter, state) {
     if (!button) return;
 
     if (state === 'correct') {
-        button.style.backgroundColor = '#6aaa64';
+        button.style.backgroundColor = '#538d4e';
         button.style.color = 'white';
     } else if (state === 'present') {
-        button.style.backgroundColor = '#c9b458';
+        button.style.backgroundColor = '#b59f3b';
         button.style.color = 'white';
     } else if (state === 'absent') {
-        button.style.backgroundColor = '#787c7e';
+        button.style.backgroundColor = '#3a3a3c';
         button.style.color = 'white';
     }
 }
@@ -266,16 +231,17 @@ function checkRow() {
                 tile.classList.add('revealed');
 
                 if (res === 'correct') {
-                    tile.style.backgroundColor = '#6aaa64';
-                    tile.style.borderColor = '#6aaa64';
+                    tile.style.backgroundColor = '#538d4e';
+                    tile.style.borderColor = '#538d4e';
                     setKeyState(letter, 'correct');
                 } else if (res === 'present') {
-                    tile.style.backgroundColor = '#c9b458';
-                    tile.style.borderColor = '#c9b458';
+                    tile.style.backgroundColor = '#b59f3b';
+                    tile.style.borderColor = '#b59f3b';
+                    tile.style.color = 'white';
                     setKeyState(letter, 'present');
                 } else {
-                    tile.style.backgroundColor = '#787c7e';
-                    tile.style.borderColor = '#787c7e';
+                    tile.style.backgroundColor = '#3a3a3c';
+                    tile.style.borderColor = '#3a3a3c';
                     setKeyState(letter, 'absent');
                 }
             }, 150);
@@ -289,9 +255,11 @@ function checkRow() {
             const minutes = String(Math.floor(timePlayed / 60)).padStart(2, '0');
             const seconds = String(timePlayed % 60).padStart(2, '0');
 
+            createFlowers(); // Animasyonu başlat
+
             setTimeout(() => {
                 modalTitle.textContent = "TEBRİKLER!";
-                modalTitle.style.color = "#6aaa64";
+                modalTitle.style.color = "#538d4e";
                 modalMessage.innerHTML = `Kelimeyi buldunuz!<br><br><b>Oynama Süreniz:</b> ${minutes}:${seconds}`;
                 modalEl.classList.remove('hidden');
             }, 300);
@@ -341,8 +309,8 @@ function init() {
     if (firstTile) {
         firstTile.textContent = firstLetter;
         firstTile.classList.add('revealed');
-        firstTile.style.backgroundColor = '#6aaa64';
-        firstTile.style.borderColor = '#6aaa64';
+        firstTile.style.backgroundColor = '#538d4e';
+        firstTile.style.borderColor = '#538d4e';
         firstTile.style.color = 'white';
         setKeyState(firstLetter, 'correct'); // Klavyede de yeşil yap
         currentTile = 1; // İkinci kutudan başlasın
@@ -383,5 +351,31 @@ document.addEventListener('keydown', (e) => {
         handleKeyPress(pressedKey);
     }
 });
+
+function createFlowers() {
+    const emojis = ['🌸', '🌼', '🌺', '🍃', '🦋'];
+    const flowerCount = 30;
+
+    for (let i = 0; i < flowerCount; i++) {
+        const flower = document.createElement('div');
+        flower.classList.add('flower');
+        flower.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        
+        // Rastgele yatay konum
+        flower.style.left = Math.random() * 100 + 'vw';
+        
+        // Rastgele animasyon süresi ve gecikme
+        const duration = Math.random() * 3 + 2; // 2-5 saniye arası
+        flower.style.animationDuration = duration + 's';
+        flower.style.animationDelay = Math.random() * 2 + 's';
+        
+        document.body.appendChild(flower);
+
+        // Animasyon bitince elementi temizle
+        setTimeout(() => {
+            flower.remove();
+        }, (duration + 2) * 1000);
+    }
+}
 
 init();
