@@ -18,6 +18,7 @@ const wordList = [
     "ŞARKICI", "OYUNCAK", "AKADEMİ", "KUTLAMA", "COŞKULU"
 ];
 const maxAttempts = 6;
+let currentLevel = 1; // 1: Kolay, 2: Orta, 3: Zor
 let wordLength;
 let targetWord;
 let currentRow = 0;
@@ -28,8 +29,21 @@ let elapsedSeconds = 0;
 const keyState = {}; // { A: 'correct' | 'present' | 'absent' }
 
 const timerEl = document.getElementById('timer');
+const levelIndicatorEl = document.getElementById('level-indicator');
 const keyboardContainer = document.getElementById('keyboard-container');
 const gameBoard = document.getElementById('game-board');
+const themeToggleBtn = document.getElementById('theme-toggle');
+
+if (themeToggleBtn) {
+    themeToggleBtn.addEventListener('click', () => {
+        document.body.classList.toggle('hacker-mode');
+        if (document.body.classList.contains('hacker-mode')) {
+            themeToggleBtn.textContent = '☀️';
+        } else {
+            themeToggleBtn.textContent = '🌙';
+        }
+    });
+}
 
 // Modal Elementleri
 const modalEl = document.getElementById('game-modal');
@@ -66,7 +80,12 @@ function setKeyState(letter, state) {
 }
 
 function pickRandomWord() {
-    targetWord = wordList[Math.floor(Math.random() * wordList.length)];
+    let targetLength = 5;
+    if (currentLevel === 2) targetLength = 6;
+    if (currentLevel === 3) targetLength = 7;
+    
+    const filteredList = wordList.filter(w => w.length === targetLength);
+    targetWord = filteredList[Math.floor(Math.random() * filteredList.length)];
     wordLength = targetWord.length;
 }
 
@@ -98,6 +117,12 @@ function formatTimer() {
     const minutes = String(Math.floor(elapsedSeconds / 60)).padStart(2, '0');
     const seconds = String(elapsedSeconds % 60).padStart(2, '0');
     timerEl.textContent = `${minutes}:${seconds}`;
+
+    if (elapsedSeconds <= 15 && elapsedSeconds > 0) {
+        timerEl.classList.add('warning');
+    } else {
+        timerEl.classList.remove('warning');
+    }
 }
 
 function timeOutGame() {
@@ -105,7 +130,9 @@ function timeOutGame() {
     setTimeout(() => {
         modalTitle.textContent = "SÜRE BİTTİ!";
         modalTitle.style.color = "#d9534f";
-        modalMessage.innerHTML = `Süreniz doldu.<br>Bulmanız gereken kelime: <b>${targetWord}</b>`;
+        modalMessage.innerHTML = `Süreniz doldu.<br>Bulmanız gereken kelime: <b>${targetWord}</b><br><br>Oyun en baştan (Kolay seviyeden) başlıyor.`;
+        modalBtn.textContent = "Baştan Başla";
+        currentLevel = 1;
         modalEl.classList.remove('hidden');
     }, 300);
 }
@@ -255,12 +282,29 @@ function checkRow() {
             const minutes = String(Math.floor(timePlayed / 60)).padStart(2, '0');
             const seconds = String(timePlayed % 60).padStart(2, '0');
 
-            createFlowers(); // Animasyonu başlat
+            let messageAddon = "";
+            if (currentRow < 3) {
+                createFire(); // Hızlı bildi, alev animasyonu!
+                messageAddon = "<br><br><b>Harika! Çok hızlı buldun! 🔥</b>";
+            } else {
+                createFlowers(); // Çiçek animasyonu
+            }
 
             setTimeout(() => {
-                modalTitle.textContent = "TEBRİKLER!";
-                modalTitle.style.color = "#538d4e";
-                modalMessage.innerHTML = `Kelimeyi buldunuz!<br><br><b>Oynama Süreniz:</b> ${minutes}:${seconds}`;
+                if (currentLevel < 3) {
+                    modalTitle.textContent = "TEBRİKLER, SEVİYE ATLADINIZ!";
+                    modalTitle.style.color = "#538d4e";
+                    let nextLevel = currentLevel === 1 ? "Orta" : "Zor";
+                    modalMessage.innerHTML = `Kelimeyi buldunuz!${messageAddon}<br><br>Süreniz: ${minutes}:${seconds}<br><br>Sıradaki seviyeye (<b>${nextLevel}</b>) geçmeye hazırsanız butona tıklayın!`;
+                    modalBtn.textContent = "Sıradaki Seviye";
+                    currentLevel++;
+                } else {
+                    modalTitle.textContent = "ŞAMPİYON!";
+                    modalTitle.style.color = "#ff7eb3";
+                    modalMessage.innerHTML = `Oyunu başarıyla bitirdiniz!<br>Tüm zorluk seviyelerini (Kolay, Orta, Zor) aştınız.<br><br>Son Seviye Süreniz: ${minutes}:${seconds}`;
+                    modalBtn.textContent = "Baştan Başla";
+                    currentLevel = 1;
+                }
                 modalEl.classList.remove('hidden');
             }, 300);
             return;
@@ -271,7 +315,9 @@ function checkRow() {
             setTimeout(() => {
                 modalTitle.textContent = "MAALESEF BİTTİ!";
                 modalTitle.style.color = "#d9534f";
-                modalMessage.innerHTML = `Bulmanız gereken kelime: <b>${targetWord}</b><br><br><b>Kalan Süreniz:</b> ${timerEl.textContent}`;
+                modalMessage.innerHTML = `Bulmanız gereken kelime: <b>${targetWord}</b><br><br>Kaybettiniz. Oyun en başa (Kolay seviyeye) dönüyor.`;
+                modalBtn.textContent = "Baştan Başla";
+                currentLevel = 1;
                 modalEl.classList.remove('hidden');
             }, 300);
             return;
@@ -286,6 +332,16 @@ function init() {
     stopTimer(); // Varsa eski sayacı durdur
     currentRow = 0;
     currentTile = 0;
+
+    let levelText = "Kolay";
+    let levelColor = "#538d4e";
+    if (currentLevel === 2) { levelText = "Orta"; levelColor = "#b59f3b"; }
+    if (currentLevel === 3) { levelText = "Zor"; levelColor = "#d9534f"; }
+    
+    if (levelIndicatorEl) {
+        levelIndicatorEl.textContent = `Seviye ${currentLevel}: ${levelText}`;
+        levelIndicatorEl.style.backgroundColor = levelColor;
+    }
 
     // Kelimeyi seç
     pickRandomWord();
@@ -375,6 +431,39 @@ function createFlowers() {
         setTimeout(() => {
             flower.remove();
         }, (duration + 2) * 1000);
+    }
+}
+
+function createFire() {
+    const emojis = ['🔥', '💥', '🚀', '🎇'];
+    const fireCount = 40;
+
+    for (let i = 0; i < fireCount; i++) {
+        const fire = document.createElement('div');
+        fire.classList.add('flower'); // Re-use the absolute positioning style of flower
+        fire.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+
+        fire.style.left = Math.random() * 100 + 'vw';
+        fire.style.top = '110vh'; // Start from bottom
+
+        const duration = Math.random() * 2 + 1; // 1-3 saniye (daha hızlı)
+        
+        // Custom animation for fire (going up)
+        fire.animate([
+            { transform: 'translateY(0) scale(0.5)', opacity: 1 },
+            { transform: `translateY(-120vh) scale(1.5) rotate(${Math.random()*360}deg)`, opacity: 0 }
+        ], {
+            duration: duration * 1000,
+            easing: 'ease-out',
+            fill: 'forwards',
+            delay: Math.random() * 1000
+        });
+
+        document.body.appendChild(fire);
+
+        setTimeout(() => {
+            fire.remove();
+        }, duration * 1000 + 1500);
     }
 }
 
